@@ -1,0 +1,25 @@
+//
+//  Product.swift
+//  Test_task
+//
+//  Created by Frederico del' Bidzho on 10.08.2024.
+//
+import SwiftUI
+import Foundation
+struct Product {
+    var id: String
+    var name: String
+    var oldPrice: Double?
+    var actualPrice: Double
+    var rating: Double
+    var feedbackCount: Int?
+    var country: String?
+    var img: UIImage
+    var offer: Offer?
+    struct Offer {
+        var offerName: String
+        var color: UIColor
+    }
+    var discount: Int?
+    var isByKg: Bool
+}
