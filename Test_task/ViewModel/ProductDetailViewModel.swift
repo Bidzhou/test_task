@@ -7,6 +7,6 @@
 
 import Foundation
 
-class ProductDetailViewModel: ObservableObject {
-    
-}
+//class ProductDetailViewModel: ObservableObject {
+//    
+//}
