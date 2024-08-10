@@ -73,7 +73,7 @@ struct ProductVerticalView: View {
 
                         Spacer()
                         if product.discount != nil{
-                            Text(String.init(describing: product.discount!))
+                            Text(String.init(describing: product.discount!) + "%")
                                 .font(.system(size: 16))
                                 .bold()
                                 .foregroundColor(Color("saleRed"))
