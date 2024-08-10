@@ -15,6 +15,7 @@
 		0093276C2C66F0080038C2C5 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0093276B2C66F0080038C2C5 /* ContentViewModel.swift */; };
 		0093276E2C66F0330038C2C5 /* ProductVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0093276D2C66F0330038C2C5 /* ProductVerticalView.swift */; };
 		009327732C6743890038C2C5 /* ProductDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009327722C6743890038C2C5 /* ProductDetailViewModel.swift */; };
+		009327752C676C640038C2C5 /* ProductHorizontalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009327742C676C640038C2C5 /* ProductHorizontalView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		0093276B2C66F0080038C2C5 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		0093276D2C66F0330038C2C5 /* ProductVerticalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductVerticalView.swift; sourceTree = "<group>"; };
 		009327722C6743890038C2C5 /* ProductDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewModel.swift; sourceTree = "<group>"; };
+		009327742C676C640038C2C5 /* ProductHorizontalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductHorizontalView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 			children = (
 				0093275D2C66EBAB0038C2C5 /* ContentView.swift */,
 				0093276D2C66F0330038C2C5 /* ProductVerticalView.swift */,
+				009327742C676C640038C2C5 /* ProductHorizontalView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 				0093276C2C66F0080038C2C5 /* ContentViewModel.swift in Sources */,
 				0093276A2C66ECAF0038C2C5 /* Product.swift in Sources */,
 				009327732C6743890038C2C5 /* ProductDetailViewModel.swift in Sources */,
+				009327752C676C640038C2C5 /* ProductHorizontalView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
