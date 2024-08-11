@@ -1,2 +1,2 @@
 # test_task
-many hours in a row
+write&tested for iphone 13mini
