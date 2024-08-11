@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-class ContentViewModel: ObservableObject {
+class ContentViewModel: ObservableObject {//Входные данные
     static let shared = ContentViewModel(); private init() { }
     var products: [Product] = [Product(id: "1",
                                        name: "Сыр ламбер 500/0 230г",

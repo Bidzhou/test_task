@@ -32,11 +32,11 @@ struct ProductVerticalView: View {
                                 .background(Color(viewModel.product.offer!.color))
                                 .clipShape(.rect(bottomTrailingRadius: 6, topTrailingRadius: 6))
                         }
-
                         
                         Spacer()
+                        
                         VStack {
-                            Button {
+                        Button { // Кнопка)
                                 print("cheque")
                             } label: {
                                 Image(uiImage: UIImage(named:  "cheque")!)
@@ -44,7 +44,8 @@ struct ProductVerticalView: View {
                                     .frame(width: 14, height: 13.7)
                                     .padding(.bottom, 6)
                             }
-                            Button {
+                            
+                            Button { //Кнопка лайка
                                 withAnimation {
                                     isHeartPushed.toggle()
                                 }
@@ -53,15 +54,15 @@ struct ProductVerticalView: View {
                                     .resizable()
                                     .frame(width: 13.2, height: 12)
                             }
-
-
-
+                            
                         }
                             .frame(width: 32, height: 64)
                             .background(Color("fiftyWhite"))
                             .cornerRadius(8)
                     }
+                    
                     Spacer()
+                    
                     HStack {
                         HStack{
                             Image(uiImage: UIImage(named: "Star")!)
@@ -72,6 +73,7 @@ struct ProductVerticalView: View {
                         }.frame(width:41, height: 20)
 
                         Spacer()
+                        
                         if viewModel.product.discount != nil{
                             Text(String.init(describing: viewModel.product.discount!) + "%")
                                 .font(.system(size: 16))
@@ -107,12 +109,10 @@ struct ProductVerticalView: View {
                 }
             }
 
-
-
             Spacer()
             
             HStack() {
-                if isCartButtonClicked == false {
+                if isCartButtonClicked == false { //если не кнопка корзины, то дефолтные элементы
                     HStack{
                         VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 0){
@@ -130,7 +130,6 @@ struct ProductVerticalView: View {
                                     .frame(width: 20, height: 20)
                             }
                             
-                            
                             if viewModel.product.oldPrice != nil {
                                 Text(String.init(describing: viewModel.product.oldPrice!))
                                     .font(.system(size: 12))
@@ -142,9 +141,9 @@ struct ProductVerticalView: View {
                         }.frame(height: 36)
                             
                         Spacer()
-                        
-                        
-                        Button(action: {
+                                                
+                        Button(action: { //кнопка корзины
+//проверка на то, есть ли уже этот элемент в корзине, если нет, то добавляем его в корзину
                             if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                 if CartViewModel.shared.positions[index].count.truncatingRemainder(dividingBy: 1) == 0{
                                     viewModel.count = Int(CartViewModel.shared.positions[index].count)
@@ -153,9 +152,8 @@ struct ProductVerticalView: View {
                                     isChangePickerView.toggle()
                                 }
 
-                                
                             } else {
-                                CartViewModel.shared.addPosition(Position(id: viewModel.product.id, product: viewModel.product, count: 1))
+                                CartViewModel.shared.addPosition(Position(id: viewModel.product.id, product: viewModel.product, count: 1))//Добавление элемента по дефолту
                             }
                             withAnimation {
                                 isCartButtonClicked.toggle()
@@ -174,9 +172,9 @@ struct ProductVerticalView: View {
                             .clipShape(.rect(cornerRadius: 16))
                     }.frame(width: 160, height: 36)
                 } else {
-                    if viewModel.product.isByKg == false {
+                    if viewModel.product.isByKg == false { //если у продукта не предусмотрена покупка за вес
                         HStack(spacing: 20){
-                            Button {
+                            Button { //кнопка удаления из корзины поштучно
                                 if viewModel.count > 1 {
                                     viewModel.count -= 1
                                     if let index = CartViewModel.shared.findPosition(viewModel.product.name){
@@ -185,7 +183,7 @@ struct ProductVerticalView: View {
                                 } else {
                                     if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                         CartViewModel.shared.removeThatMf(index)
-                                    }
+                                    }//удаление из корзины, если при 1 был нажат минус
                                     isCartButtonClicked.toggle()
                                     
                                 }
@@ -203,7 +201,7 @@ struct ProductVerticalView: View {
                                     .foregroundStyle(Color.white)
                                     .font(.system(size: 8))
                             }.frame(height: 32)
-                            Button {
+                            Button { //кнопка добавления в корзину поштучно
                                 viewModel.count += 1
                                 if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                     CartViewModel.shared.positions[index].count = Double(viewModel.count)
@@ -217,28 +215,28 @@ struct ProductVerticalView: View {
                         }.frame(width: 160, height: 36)
                             .background(Color("mainGreen"))
                             .cornerRadius(16)
-                    } else {
+                    } else { //если есть возможность взять по весу
                         VStack(spacing: 6){
                             Picker("Способ покупки", selection: $selectedSegment) {
                                 if !isChangePickerView{
                                     Text("Шт.").tag(0)
-                                    //.font(.system(size: 4))
+                                    
                                     Text("Кг").tag(1)
-                                    //.font(.system(size: 4))
+                                    
                                 } else {
                                     Text("Шт.").tag(1)
-                                    //.font(.system(size: 4))
+                                    
                                     Text("Кг").tag(0)
-                                    //.font(.system(size: 4))
+                                    
                                 }
                             }.pickerStyle(.segmented)
                                 .frame(width: 158, height: 28)
 
                             if (selectedSegment == 0 && isChangePickerView == false) || (selectedSegment == 1 && isChangePickerView == true){
-                                
+                                //если выбрано поштучно
                                 HStack(spacing: 20){
                                     Button {
-                                        if viewModel.count > 1 {
+                                        if viewModel.count > 1 {//кнопка удаления из корзины поштучно
                                             viewModel.count -= 1
                                             if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                                 CartViewModel.shared.positions[index].count = Double(viewModel.count)
@@ -246,12 +244,11 @@ struct ProductVerticalView: View {
                                         } else {
                                             if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                                 CartViewModel.shared.removeThatMf(index)
-                                            }
+                                            } //удаление из корзины, если при 1 был нажат минус
                                             isCartButtonClicked.toggle()
                                         }
                                     } label: {
                                         Image(uiImage: UIImage(named: "minus")!)
-                                            //.resizable()
                                             .frame(width: 36, height: 36)
                                     }
 
@@ -264,7 +261,7 @@ struct ProductVerticalView: View {
                                             .foregroundStyle(Color.white)
                                             .font(.system(size: 8))
                                     }.frame(width: 60,height: 32)
-                                    Button {
+                                    Button { //кнопка добавления в корзину поштучно
                                         viewModel.count += 1
                                         if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                             CartViewModel.shared.positions[index].count = Double(viewModel.count)
@@ -278,10 +275,11 @@ struct ProductVerticalView: View {
                                     .background(Color("mainGreen"))
                                     .cornerRadius(16)
                             } else {
-
+                                //выбрана покупка за вес
                                 HStack(spacing: 20){
                                     Button {
-                                        if viewModel.kgCount > 0.1 {
+                                        if viewModel.kgCount > 0.1 { //кнопка удаления
+                                            
                                             viewModel.kgCount -= 0.1
                                             if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                                 CartViewModel.shared.positions[index].count = Double(viewModel.kgCount)
@@ -307,7 +305,7 @@ struct ProductVerticalView: View {
                                             .foregroundStyle(Color.white)
                                             .font(.system(size: 8))
                                     }.frame(width: 60,height: 32)
-                                    Button {
+                                    Button { //кнопка добавления
                                         viewModel.kgCount += 0.1
                                         if let index = CartViewModel.shared.findPosition(viewModel.product.name){
                                             CartViewModel.shared.positions[index].count = Double(viewModel.kgCount)
@@ -343,7 +341,7 @@ struct ProductVerticalView: View {
         .background(Color.white)
         .cornerRadius(16)
         .shadow(radius: 2)
-        .onChange(of: selectedSegment) {
+        .onChange(of: selectedSegment) { //если был переход с поштучного режима на режим покупки за вес, то количество добавленных 'штук' обнулится и наоборот
             if selectedSegment == 0 {
                 viewModel.count = 1
                 if let index = CartViewModel.shared.findPosition(viewModel.product.name){

@@ -18,7 +18,7 @@ struct CartView: View {
             .padding()
             .padding(.bottom, 20)
         HStack(alignment: .center) {
-            Button {
+            Button { //Кнопка назад
                 dismiss()
             } label: {
                 Text("Back")
@@ -29,10 +29,8 @@ struct CartView: View {
                     .cornerRadius(10)
                     
             }
-            
-
             Spacer()
-            Button{
+            Button{ //Очистить корзину
                 viewModel.clearCart()
             } label: {
                 Text("Очистить")
@@ -43,18 +41,15 @@ struct CartView: View {
                     .cornerRadius(10)
             }
         }.padding(.horizontal, 16)
-            
-
-
-        List {
+        
+        List { //Список позиций
             ForEach(viewModel.positions, id: \.id){ position in
                 CartListObjectView(position: position)
-                    .contextMenu{
+                    .contextMenu{ //Контекстное меню для удаления позиции из корзины
                         Button{
                             if let index = viewModel.findPosition(position.product.name){
                                 viewModel.removeThatMf(index)
                             }
-                            
                         } label: {
                             Text("Delete")
                                 .foregroundStyle(Color.red)
@@ -62,12 +57,13 @@ struct CartView: View {
                     }
             }
         }.listStyle(.plain)
+        
         HStack{
             Text("Итого:")
                 .font(.title)
                 .foregroundStyle(Color.white)
             Spacer()
-            Text(String(describing: viewModel.cost.formatted()))
+            Text(String(describing: viewModel.cost.formatted()) + "₽")
                 .font(.title2)
                 .foregroundStyle(Color.white)
         }.padding()

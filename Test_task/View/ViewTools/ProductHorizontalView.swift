@@ -15,7 +15,7 @@ struct ProductHorizontalView: View {
     @StateObject var viewModel: ProductDetailViewModel
     var body: some View {
         VStack(spacing: 0){
-            
+            //Идентичная логика с ProductVerticalView
             HStack{
                 ZStack(alignment:.topLeading){
                     Image(uiImage: viewModel.product.img)

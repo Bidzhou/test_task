@@ -7,30 +7,30 @@
 
 import SwiftUI
 
-struct CartListObjectView: View {
+struct CartListObjectView: View { //no comment
     var position: Position
     var body: some View {
-        HStack{
-            Text(" \(position.product.name)")
-                .frame(width: screen.width*0.3, alignment: .leading)
-                .foregroundStyle(Color.white)
-                .lineLimit(1)
-            if position.count.truncatingRemainder(dividingBy: 1) == 0{
-                Text(String(format: "%.0f", position.count) + " шт")
-                    .frame(width: screen.width*0.33)
+        VStack{
+            HStack{
+                Text(" \(position.product.name)")
                     .foregroundStyle(Color.white)
-            } else {
-                Text("\(position.count.formatted()) кг")
-                    .frame(width: screen.width*0.3)
-                    .foregroundStyle(Color.white)
-            }
+                    .lineLimit(1)
+                Spacer()
+                if position.count.truncatingRemainder(dividingBy: 1) == 0{
+                    Text(String(format: "%.0f", position.count) + " шт")
+                        .foregroundStyle(Color.white)
+                } else {
+                    Text("\(position.count.formatted()) кг")
+                        .foregroundStyle(Color.white)
+                }
+
+            }.padding(.horizontal)
             Text(String(describing: position.cost.formatted()) + "₽ ")
-                .frame(width: screen.width*0.3, alignment: .trailing)
                 .foregroundStyle(Color.white)
-        }.frame(width: screen.width*0.96, height: 30)
-            .background(Color("mainGreen"))
+            
+        }
+        .background(Color("mainGreen"))
             .cornerRadius(6)
-        
         
     }
 }

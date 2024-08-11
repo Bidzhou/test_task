@@ -21,7 +21,7 @@ class CartViewModel: ObservableObject {
         }
         return sum
     }
-    func findPosition(_ productName: String) -> Int?{
+    func findPosition(_ productName: String) -> Int?{ //поиск индекса элемента массива positions
         for i in 0..<positions.count {
             if positions[i].product.name == productName{
                 return i
@@ -29,7 +29,7 @@ class CartViewModel: ObservableObject {
         }
         return nil
     }
-    func removeThatMf(_ index : Int){
+    func removeThatMf(_ index : Int){ 
         positions.remove(at: index)
     }
     func addPosition(_ position: Position) {
