@@ -6,7 +6,7 @@
 //
 import SwiftUI
 import Foundation
-struct Product {
+struct Product: Identifiable {
     var id: String
     var name: String
     var oldPrice: Double?

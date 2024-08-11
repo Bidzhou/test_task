@@ -14,7 +14,7 @@ struct ProductHorizontalView: View {
     var product: Product
     var body: some View {
         VStack(spacing: 0){
-            Image(uiImage: UIImage(named: "divider")!)
+            //Image(uiImage: UIImage(named: "divider")!)
             HStack{
                 ZStack(alignment:.topLeading){
                     Image(uiImage: product.img)
@@ -61,7 +61,8 @@ struct ProductHorizontalView: View {
                                     .resizable()
                                 
                                     .frame(width: 1, height: 16)
-                                Text(String.init(describing: product.feedbackCount!) + " отзывов")
+                                
+                                Text((product.feedbackCount != nil ? String.init(describing: product.feedbackCount!) : String.init(describing:0)) + " отзывов")
                                     .font(.system(size: 12))
                                     .foregroundStyle(Color("country"))
                             }.frame(height: 20)
@@ -70,11 +71,14 @@ struct ProductHorizontalView: View {
                                 .font(.system(size: 12))
                                 .foregroundStyle(Color("grayName"))
                                 .frame(height: 14)
-                            Text(String.init(describing: product.country!))
-                                .font(.system(size: 12))
-                                .multilineTextAlignment(.leading)
-                                .foregroundStyle(Color("country"))
-                                .frame(height: 14)
+                            if product.country != nil{
+                                Text(product.country != nil ? String.init(describing: product.country!) : "")
+                                    .font(.system(size: 12))
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundStyle(Color("country"))
+                                    .frame(height: 14)
+                            }
+
                         }
                         Spacer()
                         VStack {
@@ -97,6 +101,7 @@ struct ProductHorizontalView: View {
                                     .frame(width: 16, height: 16)
                                     
                             }.frame(width: 32, height: 32)
+                                .buttonStyle(BorderlessButtonStyle())
 
                         }
                             .frame(width: 32, height: 64)
@@ -135,24 +140,21 @@ struct ProductHorizontalView: View {
                                 withAnimation {
                                     isCartButtonClicked.toggle()
                                 }
+                                print(screen.width)
                             } label: {
                                 Image(uiImage: UIImage(named: "cart")!)
                                     .resizable()
                                     .frame(width: 13.51, height: 13)
-                            }.frame(width: 48, height: 36)
+                            }.buttonStyle(BorderlessButtonStyle())
+                                .frame(width: 48, height: 36)
                                 .background(Color("mainGreen"))
                                 .clipShape(.rect(cornerRadius: 16))
                         }
                     } else {
-                        Picker("Способ покупки", selection: $selectedSegment) {
-                            Text("Шт.").tag(0)
-                                //.font(.system(size: 4))
-                            Text("Кг").tag(1)
-                                //.font(.system(size: 4))
-                        }.pickerStyle(.segmented)
-                            .frame(width: 185, height: 28)
+
                         
                         if product.isByKg == false {
+                            Spacer()
                             HStack(spacing: 20){
                                 Button {
                                     print("minus")
@@ -177,10 +179,17 @@ struct ProductHorizontalView: View {
                                         .frame(width: 36, height: 36)
                                 }
 
-                            }.frame(width: 185, height: 36)
+                            }.frame(width: 175, height: 36)
                                 .background(Color("mainGreen"))
                                 .cornerRadius(16)
                         } else {
+                            Picker("Способ покупки", selection: $selectedSegment) {
+                                Text("Шт.").tag(0)
+                                    //.font(.system(size: 4))
+                                Text("Кг").tag(1)
+                                    //.font(.system(size: 4))
+                            }.pickerStyle(.segmented)
+                                .frame(width: 175, height: 28)
                             VStack{
                                 if selectedSegment == 0 {
                                     HStack(spacing: 20){
@@ -190,7 +199,7 @@ struct ProductHorizontalView: View {
                                             Image(uiImage: UIImage(named: "minus")!)
                                                 //.resizable()
                                                 .frame(width: 36, height: 36)
-                                        }
+                                        }.buttonStyle(BorderlessButtonStyle())
 
                                         VStack{
                                             Text("1 шт.")
@@ -206,9 +215,9 @@ struct ProductHorizontalView: View {
                                         } label: {
                                             Image(uiImage: UIImage(named: "plus")!)
                                                 .frame(width: 36, height: 36)
-                                        }
+                                        }.buttonStyle(BorderlessButtonStyle())
 
-                                    }.frame(width: 185, height: 36)
+                                    }.frame(width: 175, height: 36)
                                         .background(Color("mainGreen"))
                                         .cornerRadius(16)
                                 } else {
@@ -219,7 +228,7 @@ struct ProductHorizontalView: View {
                                             Image(uiImage: UIImage(named: "minus")!)
                                                 //.resizable()
                                                 .frame(width: 36, height: 36)
-                                        }
+                                        }.buttonStyle(BorderlessButtonStyle())
 
                                         VStack{
                                             Text("1 шт.")
@@ -235,9 +244,9 @@ struct ProductHorizontalView: View {
                                         } label: {
                                             Image(uiImage: UIImage(named: "plus")!)
                                                 .frame(width: 36, height: 36)
-                                        }
+                                        }.buttonStyle(BorderlessButtonStyle())
 
-                                    }.frame(width: 185, height: 36)
+                                    }.frame(width: 175, height: 36)
                                         .background(Color("mainGreen"))
                                         .cornerRadius(16)
                                    
@@ -247,7 +256,7 @@ struct ProductHorizontalView: View {
                         
                     }
 
-                }.frame(width:185,height: 144)
+                }.frame(width:175,height: 144)
                 
                 Spacer()
             }.frame(width: screen.width, height: 176)
@@ -260,13 +269,13 @@ struct ProductHorizontalView: View {
 #Preview {
     ProductHorizontalView(product: Product(id: "1",
                                            name: "липа",
-                                           oldPrice: 199.0,
+                                           oldPrice: nil,
                                            actualPrice: 9055.90,
                                            rating: 4.1,
-                                           feedbackCount: 19,
-                                           country: "russia",
+                                           feedbackCount: nil,
+                                           country: nil,
                                            img: UIImage(named: "item1")!,
-                                           offer: Product.Offer(offerName: "Удар по ценам", color: UIColor(named: "punchPrices")!),
-                                           discount: 25,
+                                           offer: nil,
+                                           discount: nil,
                                            isByKg: true))
 }

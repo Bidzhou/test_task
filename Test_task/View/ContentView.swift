@@ -8,17 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    let layoutForProduct = [GridItem(.adaptive(minimum: screen.width/2.5))]
+    private let layoutForProduct = [GridItem(.adaptive(minimum: screen.width/2.5))]
     private let products = ContentViewModel.shared.products
+    @State private var isGrid = true
     var body: some View {
         VStack {
             HStack {
                 Button {
-                    print("adkpfm")
+                    withAnimation {
+                        isGrid.toggle()
+                    }
+                    
                 } label : {
-                    Image(uiImage: UIImage(named: "4cubes")!)
+                    Image(uiImage: UIImage(named: isGrid ? "4cubes" : "listIcon")!)
                         .frame(width: 16, height: 16)
-                        .padding(24)
+                        .padding(16)
                         .background(Color("mainIcon"))
                         .cornerRadius(16)
                 }
@@ -30,14 +34,24 @@ struct ContentView: View {
             
         Image(uiImage: UIImage(named: "divider")!)
             .padding(.vertical, 2)
-        ScrollView(.vertical, showsIndicators: false) {
-            LazyVGrid(columns: layoutForProduct, content: {
-                ForEach(products, id: \.id) { product in
-                    ProductVerticalView(product: product)
-                    
+        if isGrid {
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVGrid(columns: layoutForProduct, content: {
+                    ForEach(products, id: \.id) { product in
+                        ProductVerticalView(product: product)
+                        
+                    }
+                }).padding(6)
+                
+            }
+        } else {
+            List {
+                ForEach(ContentViewModel.shared.products4List, id: \.id){ product in
+                    ProductHorizontalView(product: product)
                 }
-            }).padding(6)
+            }.listStyle(.plain)
         }
+        
     }
 }
 
