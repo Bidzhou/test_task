@@ -267,7 +267,7 @@ struct ProductVerticalView: View {
                                         if viewModel.kgCount > 0.1 {
                                             viewModel.kgCount -= 0.1
                                             if let index = CartViewModel.shared.findPosition(viewModel.product.name){
-                                                CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                                CartViewModel.shared.positions[index].count = Double(viewModel.kgCount)
                                             }
                                         } else {
                                             if let index = CartViewModel.shared.findPosition(viewModel.product.name){
@@ -293,7 +293,7 @@ struct ProductVerticalView: View {
                                     Button {
                                         viewModel.kgCount += 0.1
                                         if let index = CartViewModel.shared.findPosition(viewModel.product.name){
-                                            CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                            CartViewModel.shared.positions[index].count = Double(viewModel.kgCount)
                                         }
                                     } label: {
                                         Image(uiImage: UIImage(named: "plus")!)
@@ -329,12 +329,17 @@ struct ProductVerticalView: View {
         .onChange(of: selectedSegment) {
             if selectedSegment == 0 {
                 viewModel.count = 1
+                if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                    CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                }
             } else {
                 viewModel.kgCount = 0.1
+                if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                    CartViewModel.shared.positions[index].count = Double(viewModel.kgCount)
+                }
             }
-            if let index = CartViewModel.shared.findPosition(viewModel.product.name){
-                CartViewModel.shared.positions[index].count = Double(viewModel.count)
-            }
+
+            
         }
     }
 }

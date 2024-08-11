@@ -51,7 +51,7 @@ struct CartView: View {
                 HStack{
                     Text(position.product.name)
                     Spacer()
-                    Text(String(describing:position.count.formatted()))
+                    Text(String(describing:position.count))
                     
                     
                 }
