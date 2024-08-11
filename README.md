@@ -1,2 +1,2 @@
 # test_task
-write&tested for iphone 13mini
+wrote&tested for iphone 13mini
