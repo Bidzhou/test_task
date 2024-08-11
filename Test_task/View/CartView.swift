@@ -49,6 +49,17 @@ struct CartView: View {
         List {
             ForEach(viewModel.positions, id: \.id){ position in
                 CartListObjectView(position: position)
+                    .contextMenu{
+                        Button{
+                            if let index = viewModel.findPosition(position.product.name){
+                                viewModel.removeThatMf(index)
+                            }
+                            
+                        } label: {
+                            Text("Delete")
+                                .foregroundStyle(Color.red)
+                        }
+                    }
             }
         }.listStyle(.plain)
         HStack{

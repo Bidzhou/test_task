@@ -11,8 +11,7 @@ struct ProductVerticalView: View {
     @State var isHeartPushed = false
     @State var isCartButtonClicked = false
     @State var selectedSegment = 0
-    
-    //var product: Product
+    @State var isChangePickerView = false
     @StateObject var viewModel: ProductDetailViewModel
     var body: some View {
         
@@ -146,7 +145,18 @@ struct ProductVerticalView: View {
                         
                         
                         Button(action: {
-                            CartViewModel.shared.addPosition(Position(id: viewModel.product.id, product: viewModel.product, count: 1))
+                            if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                if CartViewModel.shared.positions[index].count.truncatingRemainder(dividingBy: 1) == 0{
+                                    viewModel.count = Int(CartViewModel.shared.positions[index].count)
+                                } else {
+                                    viewModel.kgCount = CartViewModel.shared.positions[index].count
+                                    isChangePickerView.toggle()
+                                }
+
+                                
+                            } else {
+                                CartViewModel.shared.addPosition(Position(id: viewModel.product.id, product: viewModel.product, count: 1))
+                            }
                             withAnimation {
                                 isCartButtonClicked.toggle()
                             }
@@ -210,14 +220,21 @@ struct ProductVerticalView: View {
                     } else {
                         VStack(spacing: 6){
                             Picker("Способ покупки", selection: $selectedSegment) {
-                                Text("Шт.").tag(0)
+                                if !isChangePickerView{
+                                    Text("Шт.").tag(0)
                                     //.font(.system(size: 4))
-                                Text("Кг").tag(1)
+                                    Text("Кг").tag(1)
                                     //.font(.system(size: 4))
+                                } else {
+                                    Text("Шт.").tag(1)
+                                    //.font(.system(size: 4))
+                                    Text("Кг").tag(0)
+                                    //.font(.system(size: 4))
+                                }
                             }.pickerStyle(.segmented)
                                 .frame(width: 158, height: 28)
 
-                            if selectedSegment == 0 {
+                            if (selectedSegment == 0 && isChangePickerView == false) || (selectedSegment == 1 && isChangePickerView == true){
                                 
                                 HStack(spacing: 20){
                                     Button {
