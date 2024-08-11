@@ -11,6 +11,7 @@ struct ContentView: View {
     private let layoutForProduct = [GridItem(.adaptive(minimum: screen.width/2.5))]
     private let products = ContentViewModel.shared.products
     @State private var isGrid = true
+    @State var isCartShow = false
     var body: some View {
         VStack {
             HStack {
@@ -28,17 +29,25 @@ struct ContentView: View {
                 }
 
                 Spacer()
+                Button {
+                    isCartShow.toggle()
+                    
+                } label: {
+                    Image(uiImage: UIImage(systemName: "cart.fill")!)
+                }
             }.frame(width: screen.width*0.95, height: 44)
         }
         Spacer()
-            
+            .fullScreenCover(isPresented: $isCartShow, content: {
+                CartView()
+            })
         Image(uiImage: UIImage(named: "divider")!)
             .padding(.vertical, 2)
         if isGrid {
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVGrid(columns: layoutForProduct, content: {
                     ForEach(products, id: \.id) { product in
-                        ProductVerticalView(product: product)
+                        ProductVerticalView(viewModel: ProductDetailViewModel(product: product))
                         
                     }
                 }).padding(6)
@@ -50,9 +59,11 @@ struct ContentView: View {
                     ProductHorizontalView(product: product)
                 }
             }.listStyle(.plain)
+
         }
-        
+
     }
+
 }
 
 #Preview {

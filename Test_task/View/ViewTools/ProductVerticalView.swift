@@ -8,28 +8,29 @@
 import SwiftUI
 
 struct ProductVerticalView: View {
-    @State private var isHeartPushed = false
-    @State private var isCartButtonClicked = false
-    @State private var selectedSegment = 0
-    var product: Product
+    @State var isHeartPushed = false
+    @State var isCartButtonClicked = false
+    @State var selectedSegment = 0
     
+    //var product: Product
+    @StateObject var viewModel: ProductDetailViewModel
     var body: some View {
         
         VStack(alignment: .leading) {
             ZStack(alignment: .topLeading) {
-                Image(uiImage: product.img)
+                Image(uiImage: viewModel.product.img)
                     .resizable()
                     .scaledToFit()
  
                 VStack {
                     HStack(alignment: .top) {
-                        if product.offer != nil {
-                            Text(String.init(describing: product.offer!.offerName))
+                        if viewModel.product.offer != nil {
+                            Text(String.init(describing: viewModel.product.offer!.offerName))
                                 .font(.system(size: 10))
                                 .padding(.horizontal,10)
                                 .padding(.vertical, 3)
                                 .foregroundColor(.white)
-                                .background(Color(product.offer!.color))
+                                .background(Color(viewModel.product.offer!.color))
                                 .clipShape(.rect(bottomTrailingRadius: 6, topTrailingRadius: 6))
                         }
 
@@ -67,13 +68,13 @@ struct ProductVerticalView: View {
                             Image(uiImage: UIImage(named: "Star")!)
                                 .resizable()
                                 .frame(width: 12, height: 12)
-                            Text(String.init(describing: product.rating))
+                            Text(String.init(describing: viewModel.product.rating))
                                 .font(.system(size: 12))
                         }.frame(width:41, height: 20)
 
                         Spacer()
-                        if product.discount != nil{
-                            Text(String.init(describing: product.discount!) + "%")
+                        if viewModel.product.discount != nil{
+                            Text(String.init(describing: viewModel.product.discount!) + "%")
                                 .font(.system(size: 16))
                                 .bold()
                                 .foregroundColor(Color("saleRed"))
@@ -90,14 +91,14 @@ struct ProductVerticalView: View {
             
 
 
-            Text(String.init(describing: product.name))
+            Text(String.init(describing: viewModel.product.name))
                 .font(.system(size: 12))
                 .foregroundStyle(Color("grayName"))
                 .padding(.leading,8)
-            if isCartButtonClicked != true && product.isByKg != true{
-                if product.country != nil {
+            if isCartButtonClicked != true && viewModel.product.isByKg != true{
+                if viewModel.product.country != nil {
                     HStack{
-                        Text(String.init(describing: product.country!))
+                        Text(String.init(describing: viewModel.product.country!))
                             .font(.system(size: 12))
                             .fontWeight(.light)
                             .foregroundStyle(Color("country"))
@@ -116,11 +117,11 @@ struct ProductVerticalView: View {
                     HStack{
                         VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 0){
-                                Text(String.init(describing: floor(product.actualPrice).formatted()))
+                                Text(String.init(describing: floor(viewModel.product.actualPrice).formatted()))
                                     .font(.system(size: 20))
                                     .bold()
                                     
-                                Text(String.init(describing: ((product.actualPrice - Double(Int(product.actualPrice)))*100).formatted()))
+                                Text(String.init(describing: ((viewModel.product.actualPrice - Double(Int(viewModel.product.actualPrice)))*100).formatted()))
                                     .font(.system(size: 15))
                                     .bold()
                                     .frame(width: 20, height: 22, alignment: .topTrailing)
@@ -131,8 +132,8 @@ struct ProductVerticalView: View {
                             }
                             
                             
-                            if product.oldPrice != nil {
-                                Text(String.init(describing: product.oldPrice!))
+                            if viewModel.product.oldPrice != nil {
+                                Text(String.init(describing: viewModel.product.oldPrice!))
                                     .font(.system(size: 12))
                                     .foregroundStyle(Color("grayName"))
                                     .strikethrough()
@@ -145,6 +146,7 @@ struct ProductVerticalView: View {
                         
                         
                         Button(action: {
+                            CartViewModel.shared.addPosition(Position(id: viewModel.product.id, product: viewModel.product, count: 1))
                             withAnimation {
                                 isCartButtonClicked.toggle()
                             }
@@ -162,26 +164,41 @@ struct ProductVerticalView: View {
                             .clipShape(.rect(cornerRadius: 16))
                     }.frame(width: 160, height: 36)
                 } else {
-                    if product.isByKg == false {
+                    if viewModel.product.isByKg == false {
                         HStack(spacing: 20){
                             Button {
-                                print("minus")
+                                if viewModel.count > 1 {
+                                    viewModel.count -= 1
+                                    if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                        CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                    }
+                                } else {
+                                    if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                        CartViewModel.shared.removeThatMf(index)
+                                    }
+                                    isCartButtonClicked.toggle()
+                                    
+                                }
                             } label: {
                                 Image(uiImage: UIImage(named: "minus")!)
-                                                                        .frame(width: 36, height: 36)
+                                    .frame(width: 36, height: 36)
                             }
 
                             VStack{
-                                Text("1 шт.")
+                                Text("\(viewModel.count)" + "шт")
                                     .foregroundStyle(Color.white)
                                     .font(.system(size: 12))
                                     .bold()
-                                Text("\(product.actualPrice)" + " ₽")
+                                Text("\((viewModel.product.actualPrice * Double(viewModel.count)).formatted())" + " ₽")
                                     .foregroundStyle(Color.white)
                                     .font(.system(size: 8))
-                            }.frame(width: 41, height: 32)
+                            }.frame(height: 32)
                             Button {
-                                print("plus")
+                                viewModel.count += 1
+                                if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                    CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                }
+                                
                             } label: {
                                 Image(uiImage: UIImage(named: "plus")!)
                                     .frame(width: 36, height: 36)
@@ -201,9 +218,20 @@ struct ProductVerticalView: View {
                                 .frame(width: 158, height: 28)
 
                             if selectedSegment == 0 {
+                                
                                 HStack(spacing: 20){
                                     Button {
-                                        print("minus")
+                                        if viewModel.count > 1 {
+                                            viewModel.count -= 1
+                                            if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                                CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                            }
+                                        } else {
+                                            if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                                CartViewModel.shared.removeThatMf(index)
+                                            }
+                                            isCartButtonClicked.toggle()
+                                        }
                                     } label: {
                                         Image(uiImage: UIImage(named: "minus")!)
                                             //.resizable()
@@ -211,16 +239,19 @@ struct ProductVerticalView: View {
                                     }
 
                                     VStack{
-                                        Text("1 шт.")
+                                        Text(String.init(describing: viewModel.count) + " шт.")
                                             .foregroundStyle(Color.white)
                                             .font(.system(size: 12))
                                             .bold()
-                                        Text("\(product.actualPrice)" + " ₽")
+                                        Text("\((viewModel.product.actualPrice * Double(viewModel.count)).formatted())" + " ₽")
                                             .foregroundStyle(Color.white)
                                             .font(.system(size: 8))
-                                    }.frame(width: 41, height: 32)
+                                    }.frame(width: 60,height: 32)
                                     Button {
-                                        print("plus")
+                                        viewModel.count += 1
+                                        if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                            CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                        }
                                     } label: {
                                         Image(uiImage: UIImage(named: "plus")!)
                                             .frame(width: 36, height: 36)
@@ -230,9 +261,20 @@ struct ProductVerticalView: View {
                                     .background(Color("mainGreen"))
                                     .cornerRadius(16)
                             } else {
+
                                 HStack(spacing: 20){
                                     Button {
-                                        print("minus")
+                                        if viewModel.kgCount > 0.1 {
+                                            viewModel.kgCount -= 0.1
+                                            if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                                CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                            }
+                                        } else {
+                                            if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                                CartViewModel.shared.removeThatMf(index)
+                                            }
+                                            isCartButtonClicked.toggle()
+                                        }
                                     } label: {
                                         Image(uiImage: UIImage(named: "minus")!)
                                             //.resizable()
@@ -240,16 +282,19 @@ struct ProductVerticalView: View {
                                     }
 
                                     VStack{
-                                        Text("1 шт.")
+                                        Text(String(describing: viewModel.kgCount.formatted()) + "кг")
                                             .foregroundStyle(Color.white)
                                             .font(.system(size: 12))
                                             .bold()
-                                        Text("~5,92" + " ₽")
+                                        Text("\((viewModel.product.actualPrice*viewModel.kgCount).formatted())" + " ₽")
                                             .foregroundStyle(Color.white)
                                             .font(.system(size: 8))
-                                    }.frame(width: 41, height: 32)
+                                    }.frame(width: 60,height: 32)
                                     Button {
-                                        print("plus")
+                                        viewModel.kgCount += 0.1
+                                        if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                                            CartViewModel.shared.positions[index].count = Double(viewModel.count)
+                                        }
                                     } label: {
                                         Image(uiImage: UIImage(named: "plus")!)
                                             .frame(width: 36, height: 36)
@@ -264,6 +309,7 @@ struct ProductVerticalView: View {
                        
                         
                     }
+                        
                     
                 }
                 
@@ -271,7 +317,7 @@ struct ProductVerticalView: View {
                 
     
                 
-            }.frame(width: 168, height: isCartButtonClicked == true && product.isByKg == true ? 80 : 44)
+            }.frame(width: 168, height: isCartButtonClicked == true && viewModel.product.isByKg == true ? 80 : 44)
                 
             
            
@@ -280,10 +326,19 @@ struct ProductVerticalView: View {
         .background(Color.white)
         .cornerRadius(16)
         .shadow(radius: 2)
-
+        .onChange(of: selectedSegment) {
+            if selectedSegment == 0 {
+                viewModel.count = 1
+            } else {
+                viewModel.kgCount = 0.1
+            }
+            if let index = CartViewModel.shared.findPosition(viewModel.product.name){
+                CartViewModel.shared.positions[index].count = Double(viewModel.count)
+            }
+        }
     }
 }
 
 #Preview {
-    ProductVerticalView(product: Product(id: "1", name: "Сыр ламбер 500/0 230г", oldPrice: 199.0, actualPrice: 9055.90, rating: 4.1,img: UIImage(named: "1Item")!, offer: Product.Offer(offerName: "Удар по ценам", color: UIColor(named: "punchPrices")!), isByKg: true))
+    ProductVerticalView(viewModel: ProductDetailViewModel(product: Product(id: "1", name: "Сыр ламбер 500/0 230г", oldPrice: 199.0, actualPrice: 905.90, rating: 4.1,img: UIImage(named: "1Item")!, offer: Product.Offer(offerName: "Удар по ценам", color: UIColor(named: "punchPrices")!), isByKg: false)))
 }
