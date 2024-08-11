@@ -55,7 +55,7 @@ struct ContentView: View {
             }
         } else {
             List {
-                ForEach(ContentViewModel.shared.products4List, id: \.id){ product in
+                ForEach(ContentViewModel.shared.products, id: \.id){ product in
                     ProductHorizontalView(product: product)
                 }
             }.listStyle(.plain)

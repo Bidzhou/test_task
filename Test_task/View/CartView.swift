@@ -48,15 +48,9 @@ struct CartView: View {
 
         List {
             ForEach(viewModel.positions, id: \.id){ position in
-                HStack{
-                    Text(position.product.name)
-                    Spacer()
-                    Text(String(describing:position.count))
-                    
-                    
-                }
+                CartListObjectView(position: position)
             }
-        }
+        }.listStyle(.plain)
         HStack{
             Text("Итого:")
                 .font(.title)
