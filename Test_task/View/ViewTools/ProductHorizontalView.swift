@@ -186,7 +186,7 @@ struct ProductHorizontalView: View {
                                 } label: {
                                     Image(uiImage: UIImage(named: "minus")!)
                                         .frame(width: 36, height: 36)
-                                }
+                                }.buttonStyle(BorderlessButtonStyle())
 
                                 VStack{
                                     Text("\(viewModel.count)" + "шт")
@@ -205,7 +205,7 @@ struct ProductHorizontalView: View {
                                 } label: {
                                     Image(uiImage: UIImage(named: "plus")!)
                                         .frame(width: 36, height: 36)
-                                }
+                                }.buttonStyle(BorderlessButtonStyle())
 
                             }.frame(width: 175, height: 36)
                                 .background(Color("mainGreen"))
