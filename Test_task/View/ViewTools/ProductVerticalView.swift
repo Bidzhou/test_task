@@ -112,7 +112,7 @@ struct ProductVerticalView: View {
             Spacer()
             
             HStack() {
-                if isCartButtonClicked == false { //если не кнопка корзины, то дефолтные элементы
+                if isCartButtonClicked == false { //если кнопка корзины не была нажата, то дефолтные элементы
                     HStack{
                         VStack(alignment: .leading, spacing: 0) {
                             HStack(spacing: 0){

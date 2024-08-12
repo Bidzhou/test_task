@@ -90,7 +90,8 @@ struct ProductHorizontalView: View {
                                     .resizable()
                                     .frame(width: 14, height: 13.7)
                                     
-                            }.frame(width: 32, height: 32)
+                            }.buttonStyle(BorderlessButtonStyle())
+                                .frame(width: 32, height: 32)
                             Button {
                                 withAnimation {
                                     isHeartPushed.toggle()
@@ -101,8 +102,9 @@ struct ProductHorizontalView: View {
                                     .resizable()
                                     .frame(width: 16, height: 16)
                                     
-                            }.frame(width: 32, height: 32)
-                                .buttonStyle(BorderlessButtonStyle())
+                            }.buttonStyle(BorderlessButtonStyle())
+                                .frame(width: 32, height: 32)
+                                
 
                         }
                             .frame(width: 32, height: 64)
